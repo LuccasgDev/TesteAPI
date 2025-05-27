@@ -10,5 +10,11 @@ app = FastAPI(
     openapi_url="/openapi.json",
 )
 
+# Rota raiz para verificação de saúde
+@app.get("/", summary="Rota raiz")
+async def root():
+    return {"message": "API de Gerenciamento de TCCs rodando!"}
+
+# Incluindo roteadores
 app.include_router(documentos.router)
 app.include_router(users.router)
