@@ -14,7 +14,6 @@ from .schemas import DocumentoCreate, UsuarioCreate, UsuarioUpdate
 # contexto de hashing de senha
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
 # ------------------------
 # CRUD de Documento
 # ------------------------
@@ -94,11 +93,8 @@ async def update_documento(db: AsyncSession, documento_id: int, doc_in: Document
     doc = await get_documento(db, documento_id)
     if not doc:
         return None
-
-    # atualiza dinamicamente todos os campos do schema
     for field, value in doc_in.model_dump(by_alias=True).items():
         setattr(doc, field, value)
-
     await db.commit()
     await db.refresh(doc)
     return doc
@@ -107,11 +103,9 @@ async def delete_documento(db: AsyncSession, documento_id: int) -> Documento | N
     doc = await get_documento(db, documento_id)
     if not doc:
         return None
-
     await db.delete(doc)
     await db.commit()
     return doc
-
 
 # ------------------------
 # CRUD de Usuario
@@ -146,10 +140,8 @@ async def update_usuario(db: AsyncSession, usuario_id: int, usuario_in: UsuarioU
     user = await get_usuario(db, usuario_id)
     if not user:
         return None
-
     for field, value in usuario_in.model_dump(exclude_unset=True).items():
         setattr(user, field, value)
-
     await db.commit()
     await db.refresh(user)
     return user
@@ -158,7 +150,6 @@ async def delete_usuario(db: AsyncSession, usuario_id: int) -> Usuario | None:
     user = await get_usuario(db, usuario_id)
     if not user:
         return None
-
     await db.delete(user)
     await db.commit()
     return user
